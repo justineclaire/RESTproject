@@ -5,13 +5,14 @@ import cors from 'cors';
 import connectDB from "./mongo.js";
 import { fileURLToPath } from 'url';
 import Product from "./product.js";
+import User from "./user.js";
 const app = express();
 app.use(cors());
 
 // Connect express to React to run React from localhost:8080
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
-app.use(express.static(path.join(__dirname, '../my-app/build')));
+//app.use(express.static(path.join(__dirname, '../my-app/build')));
 
 //connect to the database using func from mongo.js
 connectDB();
@@ -42,13 +43,8 @@ app.get("/hello", function (req, res) {
 // no need to set up HTTP headers
 res.send("Hello World!");
 }); // simply using res.send instead of res.write and res.end
-app.get("/goodbye", function (req, res) {
-res.send("Goodbye World!");
-});
-app.get("/", function (req, res) {
-res.send("This is the root route!");
-});
 
+/*
 // testing connection by finding all products
 Product.find({})
   .then(products => {
@@ -57,6 +53,83 @@ Product.find({})
   .catch(error => {
     console.error(error);
   });
+*/
+
+app.post('/products', async (req, res) => {
+try {
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).json({ message: 'User created', user });
+} catch (err) {
+    res.status(500).json({ error: err.message });
+}
+});
+
+app.get('/products', async (req, res) => {
+try {
+    const prods = await Product.find();
+    res.json(prods);
+    console.log(prods.splice(0,10));
+} catch (err) {
+    res.status(500).json({ error: err.message });
+    console.log(err);
+}
+});
+
+app.delete('/products/:id', async (req, res) => {
+try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.json({ message: 'User deleted' });
+} catch (err) {
+    res.status(500).json({ error: err.message });
+}
+});
+
+app.post('/users/:uid', async (req, res) => {
+    const { uid } = req.params;
+    const { productId } = req.body;
+    try {
+      const user = await User.findOne({ uid });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      // Add the product ID to the faves array
+      user.faves.push(productId);
+      await user.save();
+      res.json({ message: 'Product added to favorites' });
+    } catch (err) {
+      console.log('Error adding product to favorites:', err);
+      res.status(500).json({error: err.message });
+    }
+  });
+
+  app.get('/users/:uid', async (req, res) => {
+    const { uid } = req.params;
+    try {
+      const user = await User.findOne({ uid });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+    } catch (error) {
+      console.log('Error fetching user:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+//search ingredients
+app.get("/search/:search", async (req, res) => {
+    const search = req.params.search;
+    try {
+        const regex = new RegExp(search, 'i'); // Create a case-insensitive regular expression
+        const prod = await Product.find({ "name": { $regex: regex } });
+        res.json(prod);
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 app.listen(8080, () => {
