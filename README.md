@@ -12,6 +12,7 @@ Before you can run the web app locally, make sure you have the following install
 - I used mongodb://0.0.0.0:27017/admin as my mongo url but please edit this to your own (if it is different) in the mongo.js file in the backend directory.
 
 ## Installation
+# If it does not run on localhost:8080 please cd into the my-app directory and type npm start, it should then run on localhost:3000
 
 1. If Cloning from github:
 
