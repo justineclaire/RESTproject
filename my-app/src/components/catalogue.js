@@ -1,16 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { Message } from 'semantic-ui-react';
 import Insert from './insert.js';
 import Delete from './Delete.js';
 import Update from './update.js';
 import Favourite from './favourite.js';
 
-
 //search bar component
 function Catalogue({products}) {
 
+    const [isDisabled, setIsDisabled] = useState(true);
+    const [clicked, setClicked] = useState(false);
     const [current, setCurrent] = useState(0);
-    
+    const [currentProduct, setCurrentProduct] = useState({});
+    const [error, setError] = useState("");
+    const [confirm, setConfirm] = useState("");
+
+    useEffect(() => {
+        setCurrentProduct(products[current] || {});
+    }, [current, products]);
+
+    const showError = (message) => {
+        setError(message);
+    }
+
+    const showConfirm = (message) => {
+        setConfirm(message);
+    }
+
     //next product
     const handleNext = () => {
         setCurrent(current + 1);
@@ -31,18 +47,11 @@ function Catalogue({products}) {
         setCurrent(current - 1);
     };
 
-    //custom hook to share state between catalogue and update
-    function useIsDisabled() {
-        const [isDisabled, setIsDisabled] = useState(true);
-        const [clicked, setClicked] = useState(false);
-    
-        const toggleIsDisabled = () => {
-            setIsDisabled(!isDisabled);
-            setClicked(!clicked);
-        };
-    
-        return [isDisabled, clicked, toggleIsDisabled];
-    }
+    const toggleIsDisabled = () => {
+        setIsDisabled(!isDisabled);
+        setClicked(!clicked);
+    };
+   
     //change id with search bar and update page
 
     //favourite an item with auth! save uid and then ids of products in a faves array!
@@ -53,31 +62,38 @@ function Catalogue({products}) {
             <div className='flex flex-row justify-between'>
                 <div className='flex flex-col px-8 mt-4'>
                     <Insert products={products}/>
-                    <Update  clicked={clicked} onClick={() => undisabled}></Update>
+                    <Update toggleIsDisabled={toggleIsDisabled} clicked={clicked} currentProduct={currentProduct} showError={showError} showConfirm={showConfirm}/>
                     <Delete/>
                     <Favourite/>
                 </div>
 
                 <div>
                 <div className='flex flex-col items-center'>
+                <Message negative className='text-red-500 rounded-lg'>{error}</Message>
+                <Message negative className='text-green-500 rounded-lg'>{confirm}</Message>
                     <label>Name:</label>
-                    <input className='border-2 w-80 h-22 border-gray-400 rounded-lg text-wrap p-5' disabled={isDisabled} type='text' value={products && products[current] ? products[current].name : null}>
+                    <input className='border-2 w-80 h-22 disabled:border-gray-100 rounded-lg border-blue-500 text-wrap p-5' disabled={isDisabled} type='text' value={currentProduct.name || null}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}>
                     
                     </input>
                     <label>sku:</label>
-                    <input className='border-2 w-80 h-10 border-gray-400 rounded-lg p-2' type='text' disabled={isDisabled} value={products && products[current] ? products[current].sku : null}>
+                    <input className='border-2 w-80 h-10 disabled:border-gray-100 rounded-lg border-blue-500 p-2' type='text' disabled={isDisabled} value={currentProduct.sku || ''}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, sku: e.target.value })}>
                         
                     </input>
                     <label>Brand:</label>
-                    <input className='border-2 w-80 h-10 border-gray-400 rounded-lg p-2' disabled={isDisabled} type='text' value={products && products[current] ? products[current].manufacturer : null}>
+                    <input className='border-2 w-80 h-10 disabled:border-gray-100 rounded-lg border-blue-500 p-2' disabled={isDisabled} type='text' value={currentProduct.manufacturer || ''}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, manufacturer: e.target.value })}>
                         
                     </input>
                     <label>Price:</label>
-                    <input className='border-2 w-80 h-10 border-gray-400 rounded-lg p-2' disabled={isDisabled} type='text' value={products && products[current] ? products[current].price : null}>
+                    <input className='border-2 w-80 h-10 disabled:border-gray-100 rounded-lg border-blue-500 p-2' disabled={isDisabled} type='text' value={currentProduct.price || ''}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}>
                         
                     </input>
                     <label>Shipping Cost:</label>
-                    <input className='border-2 w-80 h-10 border-gray-400 rounded-lg p-2' disabled={isDisabled} type='text' value={products && products[current] ? products[current].shipping : null}>
+                    <input className='border-2 w-80 h-10 disabled:border-gray-100 rounded-lg border-blue-500 p-2' disabled={isDisabled} type='text' value={currentProduct.shipping || ''}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, shipping: e.target.value })}>
                         
                     </input>
                     <label>Image:</label>

@@ -20,7 +20,7 @@ function App() {
       })
       .catch((err) => console.log(err));
       
-  }, []);
+  }, [products]);
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-blue-100 to-blue-400'>

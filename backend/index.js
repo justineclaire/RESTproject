@@ -69,9 +69,19 @@ app.put('/products', async (req, res) => {
 
 app.post('/products', async (req, res) => {
 try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json({ message: 'User created', user });
+    const prod = new Product(req.body.prod);
+    console.log(prod);
+    // Find the product by ID
+    const product = await Product.findById(prod._id);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    // Update the product with the new data
+    product.set(prod);
+    await product.save();
+   
+    res.status(201).json({ message: 'product updated!', product});
 } catch (err) {
     res.status(500).json({ error: err.message });
 }
