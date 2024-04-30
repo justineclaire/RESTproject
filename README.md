@@ -13,7 +13,7 @@ Before you can run the web app locally, make sure you have the following install
 
 ## Installation
 
-1. Clone the repository to your local machine:
+1. If Cloning from github:
 
 ```bash
 git clone https://github.com/justineclaire/RESTproject
@@ -21,12 +21,31 @@ cd RESTproject
 cd backend 
 npm install
 
+cd ..
 cd my-app
 npm install
 
 cd ..
 cd backend
 node index.js
+```
+
+2. If running uploaded code
+- please open a terminal and run these commands, it should display on localhost:8080/index.html
+
+```bash
+cd RESTproject
+cd backend 
+npm install
+
+cd ..
+cd my-app
+npm install
+
+cd ..
+cd backend
+node index.js
+
 
 
 
