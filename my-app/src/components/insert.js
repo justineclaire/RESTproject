@@ -5,7 +5,7 @@ import { Message, Input, Dropdown  } from 'semantic-ui-react'
 import axios from 'axios';
 
 //search bar component
-function Insert({products}) {
+function Insert({toggleRefresh}) {
 
     const [modalOpen, setModalOpen] = useState(false);
     const [error, setError] = useState("");
@@ -27,13 +27,8 @@ function Insert({products}) {
 
     //console.log(userProduct);
     
-    var distinctTypes = []
-    for (var i = 0; i < products.length; i++) {
-        if (!distinctTypes.includes(products[i].type)) {
-            distinctTypes.push(products[i].type);
-        }
-    }
-
+    var distinctTypes = ['software', 'clothing', 'electronics', 'hardGood', 'Game', 'Movie', 'Music'];
+   
     useEffect(() => {
       setUserProduct(prevState => ({
         ...prevState,
@@ -76,6 +71,7 @@ function Insert({products}) {
           .then((res) => {
               console.log(res);
               setModalOpen(false);
+              toggleRefresh();
           })
           .catch((err) => console.log(err));
         }

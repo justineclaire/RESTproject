@@ -8,19 +8,8 @@ import { PrimeReactProvider } from 'primereact/api';
 
 function App() {
 
-  const [products, setProducts] = useState({});
-  const [current, setCurrent] = useState(0);
 
   
-  //call products to pass to catalogue
-  useEffect(() => {
-      axios.get(`http://localhost:8080/products`) 
-      .then((res) => {
-          setProducts(res.data);
-      })
-      .catch((err) => console.log(err));
-      
-  }, [products]);
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-blue-100 to-blue-400'>
@@ -30,7 +19,7 @@ function App() {
       </div>
     <div className='flex flex-col justify-start items-center'>
           
-          <Catalogue products={products}/>
+          <Catalogue />
 
     </div>
     </div>

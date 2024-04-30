@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function Update({toggleIsDisabled, clicked, currentProduct, showError, showConfirm}) {
+function Update({toggleIsDisabled, toggleRefresh, clicked, currentProduct, showError, showConfirm}) {
     
     const handleUpdate = () => {
         // Check for empty fields
@@ -39,7 +39,7 @@ function Update({toggleIsDisabled, clicked, currentProduct, showError, showConfi
     }
     return(
         <div>
-            <button onClick={clicked ? () => { toggleIsDisabled(); handleUpdate(); } : toggleIsDisabled} className={`px-5 py-1 border-2 border-gray-400 rounded-lg bg-yellow-200 w-full m-2 ${clicked ? 'bg-green-200 hover:bg-green-500' : 'bg-yellow-200 hover:bg-yellow-500'}`} >{clicked ? "Press again to update" : "Update"}</button>
+            <button onClick={clicked ? () => { toggleIsDisabled(); handleUpdate(); toggleRefresh(); } : toggleIsDisabled} className={`px-5 py-1 border-2 border-gray-400 rounded-lg bg-yellow-200 w-full m-2 ${clicked ? 'bg-green-200 hover:bg-green-500' : 'bg-yellow-200 hover:bg-yellow-500'}`} >{clicked ? "Press again to update" : "Update"}</button>
             
         </div>
     );

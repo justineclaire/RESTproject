@@ -70,7 +70,7 @@ app.put('/products', async (req, res) => {
 app.post('/products', async (req, res) => {
 try {
     const prod = new Product(req.body.prod);
-    console.log(prod);
+  
     // Find the product by ID
     const product = await Product.findById(prod._id);
     if (!product) {
@@ -99,9 +99,10 @@ try {
 
 app.delete('/products/:id', async (req, res) => {
 try {
-    const { id } = req.params;
-    await User.findByIdAndDelete(id);
-    res.json({ message: 'User deleted' });
+    const id = req.params.id;
+    
+    await Product.findByIdAndDelete(id);
+    res.status(201).json({ message: 'product deleted!', id});
 } catch (err) {
     res.status(500).json({ error: err.message });
 }
@@ -139,11 +140,11 @@ app.post('/users/:uid', async (req, res) => {
     }
   });
 
-//search ingredients
+//search products by name 
 app.get("/search/:search", async (req, res) => {
     const search = req.params.search;
     try {
-        const regex = new RegExp(search, 'i'); // Create a case-insensitive regular expression
+        const regex = new RegExp(search, 'i'); 
         const prod = await Product.find({ "name": { $regex: regex } });
         res.json(prod);
     } catch (error) {

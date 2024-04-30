@@ -1,19 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { Message } from 'semantic-ui-react';
+import axios from 'axios';
 import Insert from './insert.js';
 import Delete from './Delete.js';
 import Update from './update.js';
 import Favourite from './favourite.js';
 
 //search bar component
-function Catalogue({products}) {
+function Catalogue() {
 
+    const [products, setProducts] = useState({});
+    const [refresh, setRefresh] = useState(true);
     const [isDisabled, setIsDisabled] = useState(true);
     const [clicked, setClicked] = useState(false);
     const [current, setCurrent] = useState(0);
     const [currentProduct, setCurrentProduct] = useState({});
     const [error, setError] = useState("");
     const [confirm, setConfirm] = useState("");
+
+    
+    useEffect(() => {
+        axios.get(`http://localhost:8080/products`) 
+        .then((res) => {
+            setProducts(res.data);
+        })
+        .catch((err) => console.log(err));
+        
+    }, [refresh]);
 
     useEffect(() => {
         setCurrentProduct(products[current] || {});
@@ -51,6 +64,10 @@ function Catalogue({products}) {
         setIsDisabled(!isDisabled);
         setClicked(!clicked);
     };
+
+    const toggleRefresh = () => {
+        setRefresh(!refresh);
+    }
    
     //change id with search bar and update page
 
@@ -61,10 +78,9 @@ function Catalogue({products}) {
             <h1 className='font-ggoodfood bg-red-100 px-10 py-3 m-2'>Test the REST Microservice server!</h1>
             <div className='flex flex-row justify-between'>
                 <div className='flex flex-col px-8 mt-4'>
-                    <Insert products={products}/>
-                    <Update toggleIsDisabled={toggleIsDisabled} clicked={clicked} currentProduct={currentProduct} showError={showError} showConfirm={showConfirm}/>
-                   
-                    <Delete/>
+                    <Insert toggleRefresh={toggleRefresh}/>
+                    <Update toggleIsDisabled={toggleIsDisabled} toggleRefresh={toggleRefresh} clicked={clicked} currentProduct={currentProduct} showError={showError} showConfirm={showConfirm}/>
+                    <Delete currentProduct={currentProduct} showConfirm={showConfirm} toggleRefresh={toggleRefresh}/>
                     <Favourite/>
                 </div>
 
@@ -73,7 +89,7 @@ function Catalogue({products}) {
                 <Message negative className='text-red-500 rounded-lg'>{error}</Message>
                 <Message negative className='text-green-500 rounded-lg'>{confirm}</Message>
                     <label>Name:</label>
-                    <input className='border-2 w-80 h-22 disabled:border-gray-100 rounded-lg border-blue-500 text-wrap p-5' disabled={isDisabled} type='text' value={currentProduct.name || null}
+                    <input className='border-2 w-80 h-22 disabled:border-gray-100 rounded-lg border-blue-500 text-wrap p-5' disabled={isDisabled} type='text' value={currentProduct.name || ''}
                             onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}>
                     
                     </input>
