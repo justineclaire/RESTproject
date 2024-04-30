@@ -16,11 +16,11 @@ function Search( {setFromSearch}) {
                 console.log(res.data);
             })
             .catch((err) => console.log(err));
-        }
-
-        if (search.length === 0) {
+        }else {
+            
             setResults([]);
         }
+
     }, [search]); 
 
     return (

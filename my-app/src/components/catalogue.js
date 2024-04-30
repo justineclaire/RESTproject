@@ -7,6 +7,7 @@ import Update from './update.js';
 import Favourite from './favourite.js';
 import Search from './search.js';
 import Login from './login.js';
+import {Link} from 'react-router-dom';
 
 //search bar component
 function Catalogue() {
@@ -99,6 +100,8 @@ function Catalogue() {
                     <Update toggleIsDisabled={toggleIsDisabled} toggleRefresh={toggleRefresh} clicked={clicked} currentProduct={currentProduct} showError={showError} showConfirm={showConfirm}/>
                     <Delete currentProduct={currentProduct} showConfirm={showConfirm} toggleRefresh={toggleRefresh}/>
                     <Favourite currentProduct={currentProduct} showConfirm={showConfirm}/>
+
+                    <Link to='/about'><button className='px-5 py-8 m-2 mt-8 border-2 border-gray-400 rounded-lg bg-green-200 w-full hover:bg-green-500'>About this page</button></Link>
                 </div>
 
                 <div>

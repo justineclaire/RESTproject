@@ -13,27 +13,16 @@ app.use(express.json());
 // Connect express to React to run React from localhost:8080
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
-//app.use(express.static(path.join(__dirname, '../my-app/build')));
+app.use(express.static(path.join(__dirname, '../my-app/build')));
 
 //connect to the database using func from mongo.js
 connectDB();
 
 // set up our routes
 app.get("/hello", function (req, res) {
-// no need to set up HTTP headers
-res.send("Hello World!");
-}); // simply using res.send instead of res.write and res.end
-
-/*
-// testing connection by finding all products
-Product.find({})
-  .then(products => {
-    console.log(products);
-  })
-  .catch(error => {
-    console.error(error);
-  });
-*/
+  //endpoint for testing
+  res.send("Hello World!");
+});
 
 app.put('/products', async (req, res) => {
   try {
