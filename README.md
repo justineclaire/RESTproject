@@ -25,6 +25,7 @@ npm install
 cd ..
 cd my-app
 npm install
+npm run build
 
 cd ..
 cd backend
@@ -42,6 +43,7 @@ npm install
 cd ..
 cd my-app
 npm install
+npm run build
 
 cd ..
 cd backend
