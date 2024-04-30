@@ -1,28 +1,24 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import Catalogue from './components/catalogue';
 import Login from './components/login';
 import Search from './components/search';
-import { PrimeReactProvider } from 'primereact/api';
+import About from './components/about'
+import setFromSearch from './components/catalogue'
 
 function App() {
 
-
-  
-
   return (
-    <div className='min-h-screen bg-gradient-to-b from-blue-100 to-blue-400'>
-      <div className='flex flex-row justify-between px-10 py-3'>
-          <Search/>
-          <Login/>
-      </div>
-    <div className='flex flex-col justify-start items-center'>
-          
-          <Catalogue />
-
-    </div>
-    </div>
+      <Router>
+      <Routes>
+        <Route exact path="/index.html" element={<Catalogue />} />
+        <Route exact path="/" element={<Catalogue />} />
+        <Route exact path="/about" element={<About />} />
+        <Route exact path="/about.html" element={<About />} />
+      </Routes>
+    </Router>
   );
 }
 

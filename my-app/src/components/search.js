@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 //search bar component
-function Search() {
+function Search( {setFromSearch}) {
 
     const [search, setSearch] = useState('');
     const [results, setResults] = useState([]);
@@ -28,7 +28,7 @@ function Search() {
             <div className='flex flex-row items-center justify-center'>
                 <input
                     className='p-2 rounded-xl mb-2 h-8 sm:w-96 px-8 py-5 m-5 xs:w-64 bg-white text-slate-700'
-                    placeholder="Search for a Product by name or UPC..."
+                    placeholder="Search for a Product by name..."
                     type="text"
                     onChange={(e) => setSearch(e.target.value)}
                     />
@@ -36,12 +36,10 @@ function Search() {
             </div>
            <ul className=' absolute z-10 mt-20 bg-white rounded-lg divide-y divide-slate-700'>
                 {results.slice(0,3).map((result) => (
-                    <div className='flex flex-col p-5 hover:bg-amber-100'>
-                        
-                        <span
-                            className='font-text-700' key={result.id}>
+                    <div onClick={() => setFromSearch(result)} className='flex flex-col p-5 hover:bg-amber-100 w-80 shadow-sm shadow-gray-400'>
+                        <span 
+                            className='font-text-700' key={result._id}>
                             <h1 className='text-sm'>{result.name}</h1>
-                            <p className=' text-xs overflow-hidden w-1/2'>{result.info}</p>
                         </span>
                     </div>
                 ))}

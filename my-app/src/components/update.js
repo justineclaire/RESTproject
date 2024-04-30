@@ -30,7 +30,7 @@ function Update({toggleIsDisabled, toggleRefresh, clicked, currentProduct, showE
           axios.post('http://localhost:8080/products', {prod: currentProduct})
           .then((res) => {
               console.log(res);
-              showConfirm("Product updated!");
+              showConfirm("Product updated! It may take some seconds for the change to display");
               setTimeout(() => {showConfirm("")}, 5000);
           })
           .catch((err) => console.log(err));

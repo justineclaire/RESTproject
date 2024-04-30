@@ -5,11 +5,13 @@ import Insert from './insert.js';
 import Delete from './Delete.js';
 import Update from './update.js';
 import Favourite from './favourite.js';
+import Search from './search.js';
+import Login from './login.js';
 
 //search bar component
 function Catalogue() {
 
-    const [products, setProducts] = useState({});
+    const [products, setProducts] = useState([]);
     const [refresh, setRefresh] = useState(true);
     const [isDisabled, setIsDisabled] = useState(true);
     const [clicked, setClicked] = useState(false);
@@ -20,11 +22,18 @@ function Catalogue() {
 
     
     useEffect(() => {
-        axios.get(`http://localhost:8080/products`) 
-        .then((res) => {
-            setProducts(res.data);
-        })
-        .catch((err) => console.log(err));
+        // Function to fetch products
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/products`);
+                setProducts(response.data);
+            } catch (error) {
+                console.log('Error fetching products:', error);
+            }
+        };
+
+        // Call fetchProducts when the component mounts and whenever refresh changes
+        fetchProducts();
         
     }, [refresh]);
 
@@ -69,19 +78,27 @@ function Catalogue() {
         setRefresh(!refresh);
     }
    
-    //change id with search bar and update page
+    const setFromSearch =(prod) => {
+        setCurrentProduct(prod);
+    }
+    
 
     //favourite an item with auth! save uid and then ids of products in a faves array!
 
     return(
-        <div className='flex flex-col flex-wrap bg-white border-2 border-gray-200 w-5/6 items-center h-full p-7'>
-            <h1 className='font-ggoodfood bg-red-100 px-10 py-3 m-2'>Test the REST Microservice server!</h1>
+        <div className='flex flex-col min-h-screen bg-gradient-to-b from-blue-100 to-blue-400 items-center justify-center'>
+            <div className='flex flex-row justify-between px-10 py-3'>
+                <Search setFromSearch={setFromSearch}/>
+                <Login/>
+            </div>
+        <div className='flex flex-col flex-wrap bg-white border-2 border-gray-200 w-1/2 items-center h-5/6 p-7'>
+            <h1 className='font-Archivo font-bold bg-red-100 px-10 py-3 m-2 rounded-lg'>Test the REST Microservice server!</h1>
             <div className='flex flex-row justify-between'>
                 <div className='flex flex-col px-8 mt-4'>
                     <Insert toggleRefresh={toggleRefresh}/>
                     <Update toggleIsDisabled={toggleIsDisabled} toggleRefresh={toggleRefresh} clicked={clicked} currentProduct={currentProduct} showError={showError} showConfirm={showConfirm}/>
                     <Delete currentProduct={currentProduct} showConfirm={showConfirm} toggleRefresh={toggleRefresh}/>
-                    <Favourite/>
+                    <Favourite currentProduct={currentProduct} showConfirm={showConfirm}/>
                 </div>
 
                 <div>
@@ -114,11 +131,11 @@ function Catalogue() {
                         
                     </input>
                     <label>Image:</label>
-                    <img className='w-64 h-64' src={products && products[current] ? products[current].image : null} alt='Product' />
+                    <img className='w-48 h-48 rounded-lg' src={currentProduct.image || null} alt='Product' />
                 </div>
 
 
-                    <div className='flex flex-row justify-between'>
+                    <div className='flex flex-row justify-between pt-1'>
                         <button className='bg-yellow-200 rounded-lg p-1 hover:bg-yellow-500' onClick={handlePrevious}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
@@ -147,6 +164,7 @@ function Catalogue() {
 
             </div>
         </div>
+    </div>
     );
 }
 

@@ -108,13 +108,15 @@ try {
 }
 });
 
-app.post('/users/:uid', async (req, res) => {
-    const { uid } = req.params;
-    const { productId } = req.body;
+app.post('/users', async (req, res) => {
+
+    const productId = req.body.prod;
+    const uid = req.body.user.uid;
+    console.log(productId+req.body.user.name);
     try {
-      const user = await User.findOne({ uid });
+      let user = await User.findOne({ uid });
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        user = new User(req.body.user);
       }
       // Add the product ID to the faves array
       user.faves.push(productId);

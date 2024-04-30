@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  uid: Number,
+  uid: String,
   name: String,
   faves: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
 });
