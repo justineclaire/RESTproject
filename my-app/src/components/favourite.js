@@ -21,7 +21,7 @@ function Favourite() {
     return(
         <div>
             { user? (
-                <button className='px-5 py-1 border-2 border-gray-400 rounded-lg bg-pink-300 m-2 hover:bg-pink-500'>Add to favourites</button>
+                <button className='px-5 py-1 w-full m-2 border-2 border-gray-400 rounded-lg bg-pink-300 m-2 hover:bg-pink-500'>Add to favourites</button>
             ) : null}
         </div>
     );

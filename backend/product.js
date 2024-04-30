@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  sku: Number,
+  
+  sku: String,
   name: String,
   type: String,
   price: Number,

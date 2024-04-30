@@ -4,19 +4,19 @@ import axios from 'axios';
 import Catalogue from './components/catalogue';
 import Login from './components/login';
 import Search from './components/search';
+import { PrimeReactProvider } from 'primereact/api';
 
 function App() {
 
   const [products, setProducts] = useState({});
   const [current, setCurrent] = useState(0);
 
-  console.log({products});
-  //start with item 1 and carry on but call all items to find length?
+  
+  //call products to pass to catalogue
   useEffect(() => {
       axios.get(`http://localhost:8080/products`) 
       .then((res) => {
           setProducts(res.data);
-          console.log(res.data);
       })
       .catch((err) => console.log(err));
       

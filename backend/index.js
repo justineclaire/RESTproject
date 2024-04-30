@@ -8,6 +8,7 @@ import Product from "./product.js";
 import User from "./user.js";
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 // Connect express to React to run React from localhost:8080
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -55,6 +56,17 @@ Product.find({})
   });
 */
 
+app.put('/products', async (req, res) => {
+  try {
+      console.log('Received request:', req.body); // Check if request body is received
+      const product = new Product(req.body.prod);
+      await product.save();
+      res.status(201).json({ message: 'Product created', product });
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
+});
+
 app.post('/products', async (req, res) => {
 try {
     const user = new User(req.body);
@@ -69,7 +81,6 @@ app.get('/products', async (req, res) => {
 try {
     const prods = await Product.find();
     res.json(prods);
-    console.log(prods.splice(0,10));
 } catch (err) {
     res.status(500).json({ error: err.message });
     console.log(err);
