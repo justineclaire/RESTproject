@@ -63,6 +63,7 @@ function Catalogue({products}) {
                 <div className='flex flex-col px-8 mt-4'>
                     <Insert products={products}/>
                     <Update toggleIsDisabled={toggleIsDisabled} clicked={clicked} currentProduct={currentProduct} showError={showError} showConfirm={showConfirm}/>
+                   
                     <Delete/>
                     <Favourite/>
                 </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-//search bar component
 function Update({toggleIsDisabled, clicked, currentProduct, showError, showConfirm}) {
     
     const handleUpdate = () => {
