@@ -14,7 +14,7 @@ Before you can run the web app locally, make sure you have the following install
 ## Installation
 ### If it does not run on localhost:8080 please cd into the my-app directory and hit 'npm start', it should then run on localhost:3000
 
-1. If Cloning from github:
+1. If Cloning from github (wait until products display from db else it wont function properly):
 
 ```bash
 git clone https://github.com/justineclaire/RESTproject
@@ -32,7 +32,7 @@ cd backend
 node index.js
 ```
 
-2. If running uploaded code
+2. If running uploaded code (wait until products display from db else it wont function properly):
 - please open a terminal and run these commands, it should display on localhost:8080/index.html
 
 ```bash
