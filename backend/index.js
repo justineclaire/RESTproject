@@ -135,10 +135,25 @@ app.post('/users', async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-      res.json(user);
+      //Like a join in SQL get product info and user info
+      const userWFaves = await User.aggregate([
+        {
+          $match: { uid: user.uid }
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'faves',
+            foreignField: '_id',
+            as: 'favouriteList'
+          }
+        }
+      ]);
+      // Send the modified userWithFavorites instead of the original user
+      res.json(userWFaves);
     } catch (error) {
-      console.log('Error fetching user:', err);
-      res.status(500).json({ error: err.message });
+      console.error('Error fetching user:', error);
+      res.status(500).json({ error: error.message });
     }
   });
 

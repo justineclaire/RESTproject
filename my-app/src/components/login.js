@@ -9,6 +9,7 @@ import {
 import "../App.css";
 import { Message } from 'semantic-ui-react';
 import { auth } from "../firebase";  
+import Faves from './myfaves'
 
 //login buttons and functions using google firebase auth
 function Login() {
@@ -20,6 +21,7 @@ function Login() {
   const [loginPassword, setLoginPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showModal, setShowModal] = React.useState(false);
+  const [showFaves, setShowFaves] = React.useState(false);
   const [user, setUser] = useState({});
 
   //check for logged in user with firebase auth
@@ -106,20 +108,50 @@ function Login() {
 
   if (user) {
     return(
-      <div className='flex flex-row items-center justify-center'>
-        <div id='profbtn' className='mx-10'>
-              <button className='flex flex-row px-3 py-1 text-black tracking-wide justify-between items-center rounded-lg bg-red-200 hover:bg-pink-100' >
-                
-              <span>My Faves</span>
-              </button>
-        </div>
-      
-          
-          <div id='logbtn'>
-              <button className='flex flex-row px-3 py-1 text-black tracking-wide justify-between items-center rounded-lg bg-red-200 hover:bg-pink-100' onClick={logout}>
-                
-                <span> Log out </span></button>
+      <div>
+        <div className='flex flex-row items-center justify-center'>
+          <div id='profbtn' className='mx-10'>
+                <button onClick={() => setShowFaves(true)} className='flex flex-row px-3 py-1 text-black tracking-wide justify-between items-center rounded-lg bg-red-200 hover:bg-pink-100' >
+                <span>My Faves</span>
+                </button>
           </div>
+        
+            
+            <div id='logbtn'>
+                <button className='flex flex-row px-3 py-1 text-black tracking-wide justify-between items-center rounded-lg bg-red-200 hover:bg-pink-100' onClick={logout}>
+                  
+                  <span> Log out </span></button>
+            </div>
+        </div>
+
+        {showFaves ? (
+          <div>
+          <div className="justify-center items-center flex flex-col justify-between overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-[600px] justify-between bg-white h-[650px] outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex flex-col items-start justify-start p-5 h-5/6 w-5/6 items-center overflow-scroll border-b border-solid border-blueGray-200 rounded-t">
+                  <h3 className="text-3xl font-semibold p-2 mb-3">{user.displayName}'s Favourite Products</h3>
+                  <Faves currentUser={user} />
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                  <button
+                    className="text-blue-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowFaves(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        ) : null }
+
       </div>
     );
 
