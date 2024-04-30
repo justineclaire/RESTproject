@@ -8,15 +8,30 @@ function Faves({currentUser}) {
     const [results, setResults] = useState([]);
     
     useEffect(() => {
-            axios.get(`http://localhost:8080/users/${currentUser.uid}`)
-            .then((res) => {
-                setResults(res.data);
-                console.log(res.data);
-            })
-            .catch((err) => console.log(err));
+        axios.get(`http://localhost:8080/users/${currentUser.uid}`)
+        .then((res) => {
+            setResults(res.data);
+            console.log(res.data);
+        })
+        .catch((err) => console.log(err));
 
             
     }, [currentUser]); 
+
+    const remove = (prodid) => {
+        axios.post(`http://localhost:8080/removeFaves`, {uid: currentUser.uid, prodid: prodid})
+            .then((res) => {
+                console.log(res.data);
+                // Refresh data after removing the favorite
+                axios.get(`http://localhost:8080/users/${currentUser.uid}`)
+                .then((res) => {
+                    setResults(res.data);
+                    console.log(res.data);
+                })
+                .catch((err) => console.log(err));
+                })
+            .catch((err) => console.log(err));
+    }
 
     return (
         <div className='flex flex-col h-max font-Archivo'>
@@ -25,16 +40,16 @@ function Faves({currentUser}) {
                     {results.map(user => (
                     <div key={user._id}>
                         {user.favouriteList.map(fave => (
-                        <div key={fave._id} className='flex flex-row justify-between bg-pink-100 rounded-lg items-center h-32 p-5 w-full'>
+                        <div key={fave._id} className='flex flex-row justify-start bg-pink-100 rounded-lg items-center h-32 p-5 m-2 w-full'>
                             <img src={fave.image} className='h-32 w-32 p-2 rounded-xl' alt='Product Image' />
                             <div className='flex flex-col justify-between'>
                                 <h1 className=' font-Archivo font-bold'>{fave.name}</h1>
                                 <p>{fave.manufacturer}</p>
-                                <Link to={fave.url} className='bg-blue-200 rounded-lg p-2 w-1/2 hover:bg-blue-400 text-sm'><button>Buy me</button></Link>
+                                <div className='flex flex-row'>
+                                    <Link to={fave.url} target="_blank"><button className='bg-blue-200 h-10 rounded-lg p-1 w-24 hover:bg-blue-400 text-sm m-1'>Buy me</button></Link>
+                                    <button onClick={() => remove(`${fave._id}`)} className='bg-red-400 text-sm rounded-lg p-1 m-1 w-24 h-10' >Remove</button>
+                                </div>
                             </div>
-                           
-
-                            {/* You can access other properties of fave here */}
                         </div>
                         ))}
                     </div>

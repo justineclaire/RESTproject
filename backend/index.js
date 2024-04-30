@@ -1,5 +1,5 @@
 import express from "express";
-import http from "http";
+import mongoose from 'mongoose';
 import path from 'path';
 import cors from 'cors';
 import connectDB from "./mongo.js";
@@ -17,27 +17,6 @@ const __dirname = path.dirname(__filename); // get the name of the directory
 
 //connect to the database using func from mongo.js
 connectDB();
-
-/*// Function to connect to an in-memory MongoDB server
-async function connectToDb() {
-  const mongoServer = await MongoMemoryServer.create(); // Use create to create an instance of an in-memory MongoDB server
-  const uri = await mongoServer.getUri(); // Get the connection URI for the in-memory MongoDB server
-  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }); // Connect to the MongoDB server using MongoClient
-  console.log("Connected to MongoDB in memory!");
-  return client; // Return the MongoDB client instance
-}
-
-async function setupMongo() {
-    const client = await connectToDb(); // Connect to the in-memory MongoDB server
-    await createCollection(client); 
-}
-
-// Function to create a "products" collection in the database
-async function createCollection(client) {
-    const db = client.db("myDatabase");
-    await db.createCollection("products"); 
-    console.log("Created collection 'products'");
-}*/
 
 // set up our routes
 app.get("/hello", function (req, res) {
@@ -100,7 +79,6 @@ try {
 app.delete('/products/:id', async (req, res) => {
 try {
     const id = req.params.id;
-    
     await Product.findByIdAndDelete(id);
     res.status(201).json({ message: 'product deleted!', id});
 } catch (err) {
@@ -153,6 +131,26 @@ app.post('/users', async (req, res) => {
       res.json(userWFaves);
     } catch (error) {
       console.error('Error fetching user:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/removeFaves', async (req, res) => {
+    const { uid, prodid } = req.body;
+    
+    try {
+      let user = await User.findOne({ uid });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      console.log(user.faves);
+      const objectIdProdId = new mongoose.Types.ObjectId(prodid);
+      console.log(objectIdProdId);
+      user.faves = user.faves.filter(fave => !fave.equals(objectIdProdId));
+      await user.save();
+      res.json({ message: 'Product removed from favorites' });
+    } catch (error) {
+      console.error('Error removing products:', error);
       res.status(500).json({ error: error.message });
     }
   });
