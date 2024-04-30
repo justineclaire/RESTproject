@@ -9,6 +9,7 @@ Before you can run the web app locally, make sure you have the following install
 - Node.js and npm (Node Package Manager)
 - MongoDB (admin database with a products collection)
 - You can import the products to mongodb using the products.json file located in the backend directory. 
+- I used mongodb://0.0.0.0:27017/admin as my mongo url but please edit this to your own (if it is different) in the mongo.js file in the backend directory.
 
 ## Installation
 
@@ -25,6 +26,7 @@ npm install
 
 cd ..
 cd backend
-node index.js```
+node index.js
+
 
 
